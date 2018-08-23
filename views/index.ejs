@@ -1,0 +1,22 @@
+<% include partials/header %>
+    <h1>Add customer</h1>
+    <form method="POST" action="/user/add">
+        <label for="">First Name</label><br>
+        <input type="text" name="firstName">
+        <br>
+        <label for="">Last Name</label><br>
+        <input type="text" name="lastName">
+        <br>
+        <label for="">Email</label><br>
+        <input type="text" name="email">
+        <br>
+        <br>    
+        <input type="submit" value="Submit"> 
+    </form>
+    <h1><%= title  %></h1>
+    <ul>
+        <% user.forEach(function(user){ %>
+            <li><%= user.first_name  %> <%= user.last_name  %></li>
+        <% }) %>
+    </ul>     
+<% include partials/footer %>

@@ -4,6 +4,7 @@ var path = require('path');
 var expressValidator = require('express-validator');
 var mongojs = require('mongojs');
 var db = mongojs('customerapp', ['users']);
+var ObjectId = mongojs.ObjectId;
 
 var app = express();
 
@@ -54,7 +55,7 @@ app.get('/', function(req , res){
         //console.log(docs); 
         res.render('index' , {
             title : 'Customers',
-            user : docs
+            users : docs
         });
     })
     
@@ -80,9 +81,26 @@ app.post('/user/add', function(req , res){
             lastName : req.body.lastName,
             email : req.body.email
         }
-        console.log('Success');
+        
+        db.users.insert(newUser , function(err , result){
+            if(err){
+                console.log(err);
+            }
+            res.redirect('/');
+        });
     }
 })
+
+app.delete('/users/delete/:id', function(req , res){
+    db.users.remove({ _id : ObjectId(req.params.id)} , function(err, result){
+        if(err){
+            console.log(err);
+        }
+        res.redirect('/');
+    })
+});
+
+
 app.listen(3000 , function(){
     console.log('Server started on port 3000 ...')
 });

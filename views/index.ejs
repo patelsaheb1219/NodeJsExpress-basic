@@ -20,8 +20,8 @@
     </form>
     <h1><%= title  %></h1>
     <ul>
-        <% user.forEach(function(user){ %>
-            <li><%= user.firstName  %> <%= user.lastName  %></li>
+        <% users.forEach(function(user){ %>
+            <li><%= user.firstName  %> <%= user.lastName  %> -<a href="" class="deleteUser" data-id="<%= user._id %>">Delete</a></li>
         <% }) %>
     </ul>     
 <% include partials/footer %>

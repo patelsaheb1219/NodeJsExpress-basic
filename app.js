@@ -2,6 +2,8 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var path = require('path');
 var expressValidator = require('express-validator');
+var mongojs = require('mongojs');
+var db = mongojs('customerapp', ['users']);
 
 var app = express();
 
@@ -23,6 +25,12 @@ app.use(bodyParser.urlencoded({extended : false}));
 //Set static path
 app.use(express.static(path.join(__dirname , 'public')));
 
+//Global variables
+app.use(function(req , res , next){
+    res.locals.errors = null;
+    next();
+});
+
 // Express Validator Middleware 
 app.use(expressValidator({
     errorFormatter: function(param, msg, value) {
@@ -41,32 +49,15 @@ app.use(expressValidator({
     }
   }));
 
-var users  = [ 
-    {
-        id : 1,
-        first_name : 'Kishan',
-        last_name : 'Patel',
-        email : 'kaumik@gmail.com'
-    },
-    {
-        id : 2,
-        first_name : 'Ravi',
-        last_name : 'Patel',
-        email : 'ravi@gmail.com'
-    },
-    {
-        id : 3,
-        first_name : 'Freddy',
-        last_name : 'Thobhani',
-        email : 'freddy@gmail.com'
-    }
-]
-
 app.get('/', function(req , res){
-    res.render('index' , {
-        title : 'Customers',
-        user : users
-    });
+    db.users.find(function (err, docs) {
+        //console.log(docs); 
+        res.render('index' , {
+            title : 'Customers',
+            user : docs
+        });
+    })
+    
 });
 
 app.post('/user/add', function(req , res){
